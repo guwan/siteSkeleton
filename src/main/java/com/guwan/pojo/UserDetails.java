@@ -1,6 +1,56 @@
 package com.guwan.pojo;
 
+import java.util.Collection;
 
-public class UserDetails {
+import org.springframework.security.core.GrantedAuthority;
+
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails{
+
+	/**
+	 * auto generate serialVersionUID
+	 */
+	private static final long serialVersionUID = 5381296560264677900L;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
