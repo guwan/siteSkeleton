@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.guwan;
+package com.guwan.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,6 +26,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
+
+import com.guwan.domain.User;
 
 /**
  * Class with the implementation of the custom repository code. Uses JDBC in this case. For basic programatic setup see

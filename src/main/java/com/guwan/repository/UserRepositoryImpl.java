@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.guwan;
+package com.guwan.repository;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
+
+import com.guwan.domain.User;
 
 /**
  * Implementation fo the custom repository functionality declared in {@link UserRepositoryCustom} based on JPA. To use

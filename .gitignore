@@ -4,5 +4,6 @@ target
 *iml
 *settings
 *classpath
-*.bak
 bower_components
+/build/
+/bin/

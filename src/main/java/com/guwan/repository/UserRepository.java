@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.guwan;
+package com.guwan.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+
+import com.guwan.domain.User;
 
 /**
  * Repository interface for {@link User} instances. Provides basic CRUD operations due to the extension of
