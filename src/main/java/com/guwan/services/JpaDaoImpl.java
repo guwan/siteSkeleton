@@ -22,6 +22,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.jdbc.core.RowMapper;
@@ -90,30 +93,18 @@ import org.springframework.util.Assert;
  * @author colin sampaleanu
  * @author Luke Taylor
  */
-public class JpaDaoImpl extends JdbcDaoSupport implements UserDetailsService {
+public class JpaDaoImpl extends JpaDaoSupport implements UserDetailsService {
     //~ Static fields/initializers =====================================================================================
 
-    public static final String DEF_USERS_BY_USERNAME_QUERY =
-            "select username,password,enabled " +
-            "from users " +
-            "where username = ?";
-    public static final String DEF_AUTHORITIES_BY_USERNAME_QUERY =
-            "select username,authority " +
-            "from authorities " +
-            "where username = ?";
-    public static final String DEF_GROUP_AUTHORITIES_BY_USERNAME_QUERY =
-            "select g.id, g.group_name, ga.authority " +
-            "from groups g, group_members gm, group_authorities ga " +
-            "where gm.username = ? " +
-            "and g.id = ga.group_id " +
-            "and g.id = gm.group_id";
+    public static final String DEF_USERS_BY_USERNAME_QUERY ="select u from User u where u.username = ?1";
+
+    public static final String DEF_AUTHORITIES_BY_USERNAME_QUERY ="select a from Authority a where a.username = ?1";
 
     //~ Instance fields ================================================================================================
 
     protected final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
     private String authoritiesByUsernameQuery;
-    private String groupAuthoritiesByUsernameQuery;
     private String usersByUsernameQuery;
     private String rolePrefix = "";
     private boolean usernameBasedPrimaryKey = true;
@@ -125,7 +116,6 @@ public class JpaDaoImpl extends JdbcDaoSupport implements UserDetailsService {
     public JpaDaoImpl() {
         usersByUsernameQuery = DEF_USERS_BY_USERNAME_QUERY;
         authoritiesByUsernameQuery = DEF_AUTHORITIES_BY_USERNAME_QUERY;
-        groupAuthoritiesByUsernameQuery = DEF_GROUP_AUTHORITIES_BY_USERNAME_QUERY;
     }
 
     //~ Methods ========================================================================================================
@@ -165,10 +155,6 @@ public class JpaDaoImpl extends JdbcDaoSupport implements UserDetailsService {
             dbAuthsSet.addAll(loadUserAuthorities(user.getUsername()));
         }
 
-        if (enableGroups) {
-            dbAuthsSet.addAll(loadGroupAuthorities(user.getUsername()));
-        }
-
         List<GrantedAuthority> dbAuths = new ArrayList<GrantedAuthority>(dbAuthsSet);
 
         addCustomAuthorities(user.getUsername(), dbAuths);
@@ -189,6 +175,7 @@ public class JpaDaoImpl extends JdbcDaoSupport implements UserDetailsService {
      * There should normally only be one matching user.
      */
     protected List<UserDetails> loadUsersByUsername(String username) {
+    	TypedQuery<com.guwan.domain.User> a=em.createQuery(usersByUsernameQuery,com.guwan.domain.User.class).setParameter(1, username);
         return getJdbcTemplate().query(usersByUsernameQuery, new String[] {username}, new RowMapper<UserDetails>() {
             public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
                 String username = rs.getString(1);
@@ -215,20 +202,6 @@ public class JpaDaoImpl extends JdbcDaoSupport implements UserDetailsService {
         });
     }
 
-    /**
-     * Loads authorities by executing the SQL from <tt>groupAuthoritiesByUsernameQuery</tt>.
-     *
-     * @return a list of GrantedAuthority objects for the user
-     */
-    protected List<GrantedAuthority> loadGroupAuthorities(String username) {
-        return getJdbcTemplate().query(groupAuthoritiesByUsernameQuery, new String[] {username}, new RowMapper<GrantedAuthority>() {
-            public GrantedAuthority mapRow(ResultSet rs, int rowNum) throws SQLException {
-                 String roleName = getRolePrefix() + rs.getString(3);
-
-                return new SimpleGrantedAuthority(roleName);
-            }
-        });
-    }
 
     /**
      * Can be overridden to customize the creation of the final UserDetailsObject which is
@@ -267,17 +240,7 @@ public class JpaDaoImpl extends JdbcDaoSupport implements UserDetailsService {
         return authoritiesByUsernameQuery;
     }
 
-    /**
-     * Allows the default query string used to retrieve group authorities based on username to be overridden, if
-     * default table or column names need to be changed. The default query is {@link
-     * #DEF_GROUP_AUTHORITIES_BY_USERNAME_QUERY}; when modifying this query, ensure that all returned columns are mapped
-     * back to the same column names as in the default query.
-     *
-     * @param queryString The SQL query string to set
-     */
-    public void setGroupAuthoritiesByUsernameQuery(String queryString) {
-        groupAuthoritiesByUsernameQuery = queryString;
-    }
+
 
     /**
      * Allows a default role prefix to be specified. If this is set to a non-empty value, then it is
