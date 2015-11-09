@@ -33,11 +33,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.Assert;
+
+import com.guwan.domain.User;
 
 
 /**
@@ -138,90 +139,9 @@ public class JpaDaoImpl extends JpaDaoSupport implements UserDetailsService {
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<UserDetails> users = loadUsersByUsername(username);
-
-        if (users.size() == 0) {
-            logger.debug("Query returned no results for user '" + username + "'");
-
-            throw new UsernameNotFoundException(
-                    messages.getMessage("JdbcDaoImpl.notFound", new Object[]{username}, "Username {0} not found"), username);
-        }
-
-        UserDetails user = users.get(0); // contains no GrantedAuthority[]
-
-        Set<GrantedAuthority> dbAuthsSet = new HashSet<GrantedAuthority>();
-
-        if (enableAuthorities) {
-            dbAuthsSet.addAll(loadUserAuthorities(user.getUsername()));
-        }
-
-        List<GrantedAuthority> dbAuths = new ArrayList<GrantedAuthority>(dbAuthsSet);
-
-        addCustomAuthorities(user.getUsername(), dbAuths);
-
-        if (dbAuths.size() == 0) {
-            logger.debug("User '" + username + "' has no authorities and will be treated as 'not found'");
-
-            throw new UsernameNotFoundException(
-                    messages.getMessage("JdbcDaoImpl.noAuthority",
-                            new Object[] {username}, "User {0} has no GrantedAuthority"), username);
-        }
-
-        return createUserDetails(username, user, dbAuths);
-    }
-
-    /**
-     * Executes the SQL <tt>usersByUsernameQuery</tt> and returns a list of UserDetails objects.
-     * There should normally only be one matching user.
-     */
-    protected List<UserDetails> loadUsersByUsername(String username) {
-    	TypedQuery<com.guwan.domain.User> a=em.createQuery(usersByUsernameQuery,com.guwan.domain.User.class).setParameter(1, username);
-        return getJdbcTemplate().query(usersByUsernameQuery, new String[] {username}, new RowMapper<UserDetails>() {
-            public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
-                String username = rs.getString(1);
-                String password = rs.getString(2);
-                boolean enabled = rs.getBoolean(3);
-                return new User(username, password, enabled, true, true, true, AuthorityUtils.NO_AUTHORITIES);
-            }
-
-        });
-    }
-
-    /**
-     * Loads authorities by executing the SQL from <tt>authoritiesByUsernameQuery</tt>.
-     *
-     * @return a list of GrantedAuthority objects for the user
-     */
-    protected List<GrantedAuthority> loadUserAuthorities(String username) {
-        return getJdbcTemplate().query(authoritiesByUsernameQuery, new String[] {username}, new RowMapper<GrantedAuthority>() {
-            public GrantedAuthority mapRow(ResultSet rs, int rowNum) throws SQLException {
-                String roleName = rolePrefix + rs.getString(2);
-
-                return new SimpleGrantedAuthority(roleName);
-            }
-        });
-    }
-
-
-    /**
-     * Can be overridden to customize the creation of the final UserDetailsObject which is
-     * returned by the <tt>loadUserByUsername</tt> method.
-     *
-     * @param username the name originally passed to loadUserByUsername
-     * @param userFromUserQuery the object returned from the execution of the
-     * @param combinedAuthorities the combined array of authorities from all the authority loading queries.
-     * @return the final UserDetails which should be used in the system.
-     */
-    protected UserDetails createUserDetails(String username, UserDetails userFromUserQuery,
-            List<GrantedAuthority> combinedAuthorities) {
-        String returnUsername = userFromUserQuery.getUsername();
-
-        if (!usernameBasedPrimaryKey) {
-            returnUsername = username;
-        }
-
-        return new User(returnUsername, userFromUserQuery.getPassword(), userFromUserQuery.isEnabled(),
-                true, true, true, combinedAuthorities);
+    	TypedQuery<User> tq= em.createQuery(usersByUsernameQuery,User.class).setParameter(1, username);
+    	UserDetails user = tq.getSingleResult();
+        return user;
     }
 
     /**

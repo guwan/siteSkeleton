@@ -38,7 +38,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @EnableAutoConfiguration
-class CustomRepositoryConfig {
+public class CustomRepositoryConfig {
 	@Value("#{dataSource}")
 	private javax.sql.DataSource dataSource;
 

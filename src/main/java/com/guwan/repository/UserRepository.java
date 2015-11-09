@@ -39,7 +39,7 @@ public interface UserRepository extends CrudRepository<User, Long>, UserReposito
 	 * @param username
 	 * @return
 	 */
-	User findByTheUsersName(String username);
+	User loadUserByUsername(String username);
 
 	/**
 	 * Find all users with the given lastname. This method will be translated into a query by constructing it directly
@@ -48,7 +48,7 @@ public interface UserRepository extends CrudRepository<User, Long>, UserReposito
 	 * @param lastname
 	 * @return
 	 */
-	List<User> findByLastname(String lastname);
+	User findByEmail(String email);
 
 	/**
 	 * Returns all users with the given firstname. This method will be translated into a query using the one declared in
@@ -57,6 +57,9 @@ public interface UserRepository extends CrudRepository<User, Long>, UserReposito
 	 * @param firstname
 	 * @return
 	 */
-	@Query("select u from User u where u.firstname = ?1")
-	List<User> findByFirstname(String firstname);
+	@Query("select u from User u where u.enabled = ?1")
+	List<User> findByenabled(Boolean userEnabled);
+
+	List<User> findByUsername(String string);
+
 }

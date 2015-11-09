@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.guwan;
+package com.guwan.repository;
 
 import static org.junit.Assert.*;
 
@@ -26,6 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.guwan.CustomRepositoryConfig;
 import com.guwan.domain.User;
 import com.guwan.repository.UserRepository;
 
@@ -50,7 +51,7 @@ public class UserRepositoryCustomizationTests {
 	public void testInsert() {
 
 		User user = new User();
-		user.setUsername("username");
+		user.setEmail("email@qq.com");
 
 		user = repository.save(user);
 
@@ -58,20 +59,20 @@ public class UserRepositoryCustomizationTests {
 	}
 
 	@Test
-	public void saveAndFindByLastNameAndFindByUserName() {
+	public void saveAndFindByNameAndFindByEmail() {
 
 		User user = new User();
-		user.setUsername("foobar");
-		user.setLastname("lastname");
+		user.setUsername("email");
+		user.setEmail("email@qq.com");
 
 		user = repository.save(user);
 
-		List<User> users = repository.findByLastname("lastname");
+		List<User> users = repository.findByUsername("email");
 
 		assertNotNull(users);
 		assertTrue(users.contains(user));
 
-		User reference = repository.findByTheUsersName("foobar");
+		User reference = repository.findByEmail("email@qq.com");
 		assertEquals(user, reference);
 	}
 
@@ -99,11 +100,10 @@ public class UserRepositoryCustomizationTests {
 
 		User user = new User();
 		user.setUsername("username");
-		user.setFirstname("jams");
 
 		user = repository.save(user);
 
-		List<User> users = repository.findUsersByNameQuery("jams");
+		List<User> users = repository.findUsersByNameQuery("username");
 
 		assertNotNull(users);
 		assertTrue(users.contains(user));
@@ -113,13 +113,12 @@ public class UserRepositoryCustomizationTests {
 
 		User user = new User();
 		user.setUsername("username");
-		user.setFirstname("jams");
 
 		user = repository.save(user);
 
-		User reference = repository.findUserByNameQuery("jams");
+		User reference = repository.findUserByNameQuery("username");
 		
-		assertNotNull(user);
-		assertEquals(user, repository.findOne(user.getId()));
+		assertNotNull(reference);
+		assertEquals(user, reference);
 	}
 }

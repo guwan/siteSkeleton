@@ -76,14 +76,14 @@ class UserRepositoryImpl implements UserRepositoryCustom {
 
 	@Override
 	public List<User> findUsersByNameQuery(String value) {
-		TypedQuery<User> tq =em.createQuery("select u from User u where u.firstname = ?1", User.class);
+		TypedQuery<User> tq =em.createQuery("select u from User u where u.username = ?1", User.class);
 		tq.setParameter(1, value);
 		return tq.getResultList();
 	}
 
 	@Override
 	public User findUserByNameQuery(String value) {
-		TypedQuery<User> tq =em.createQuery("select u from User u where u.firstname = ?1", User.class);
+		TypedQuery<User> tq =em.createQuery("select u from User u where u.username = ?1", User.class);
 		tq.setParameter(1, value);
 		return tq.getSingleResult();
 	}

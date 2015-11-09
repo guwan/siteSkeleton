@@ -7,3 +7,6 @@ target
 bower_components
 /build/
 /bin/
+gradle.properties
+.gradle
+build/
