@@ -109,8 +109,6 @@ public class JpaDaoImpl extends JpaDaoSupport implements UserDetailsService {
     private String usersByUsernameQuery;
     private String rolePrefix = "";
     private boolean usernameBasedPrimaryKey = true;
-    private boolean enableAuthorities = true;
-    private boolean enableGroups;
 
     //~ Constructors ===================================================================================================
 
@@ -132,10 +130,6 @@ public class JpaDaoImpl extends JpaDaoSupport implements UserDetailsService {
 
     public String getUsersByUsernameQuery() {
         return usersByUsernameQuery;
-    }
-
-    protected void initDao() throws ApplicationContextException {
-        Assert.isTrue(enableAuthorities || enableGroups, "Use of either authorities or groups must be enabled");
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -212,26 +206,5 @@ public class JpaDaoImpl extends JpaDaoSupport implements UserDetailsService {
         this.usersByUsernameQuery = usersByUsernameQueryString;
     }
 
-    protected boolean getEnableAuthorities() {
-        return enableAuthorities;
-    }
-
-    /**
-     * Enables loading of authorities (roles) from the authorities table. Defaults to true
-     */
-    public void setEnableAuthorities(boolean enableAuthorities) {
-        this.enableAuthorities = enableAuthorities;
-    }
-
-    protected boolean getEnableGroups() {
-        return enableGroups;
-    }
-
-    /**
-     * Enables support for group authorities. Defaults to false
-     * @param enableGroups
-     */
-    public void setEnableGroups(boolean enableGroups) {
-        this.enableGroups = enableGroups;
-    }
+   
 }

@@ -3,12 +3,15 @@ package com.guwan.domain;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
@@ -89,7 +92,8 @@ public class User implements UserDetails{
     //√‹¬Î ß–ß
     private boolean credentialsNonExpired;
     // ⁄»®
-    private Collection<? extends GrantedAuthority> authorities;
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="username")
+    private Collection<Authority> authorities;
 
     public User() {
 		this(null);
