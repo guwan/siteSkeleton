@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails{
+public class UserDetailsImp implements org.springframework.security.core.userdetails.UserDetails{
 
 	/**
 	 * auto generate serialVersionUID

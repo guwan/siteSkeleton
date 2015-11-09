@@ -19,6 +19,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import com.guwan.domain.User;
@@ -71,5 +72,19 @@ class UserRepositoryImpl implements UserRepositoryCustom {
 		CriteriaQuery<User> criteriaQuery = em.getCriteriaBuilder().createQuery(User.class);
 		criteriaQuery.select(criteriaQuery.from(User.class));
 		return em.createQuery(criteriaQuery).getResultList();
+	}
+
+	@Override
+	public List<User> findUsersByNameQuery(String value) {
+		TypedQuery<User> tq =em.createQuery("select u from User u where u.firstname = ?1", User.class);
+		tq.setParameter(1, value);
+		return tq.getResultList();
+	}
+
+	@Override
+	public User findUserByNameQuery(String value) {
+		TypedQuery<User> tq =em.createQuery("select u from User u where u.firstname = ?1", User.class);
+		tq.setParameter(1, value);
+		return tq.getSingleResult();
 	}
 }

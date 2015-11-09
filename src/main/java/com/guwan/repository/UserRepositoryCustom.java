@@ -33,4 +33,18 @@ interface UserRepositoryCustom {
 	 * @return
 	 */
 	List<User> myCustomBatchOperation();
+
+	/**
+	 * Custom repository operation.
+	 * 
+	 * @return
+	 */
+	List<User> findUsersByNameQuery(String value);
+
+	/**
+	 * Custom repository operation.
+	 * 
+	 * @return
+	 */
+	User findUserByNameQuery(String value);
 }

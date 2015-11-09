@@ -91,4 +91,35 @@ public class UserRepositoryCustomizationTests {
 		assertNotNull(users);
 		assertTrue(users.contains(user));
 	}
+	/**
+	 * Test invocation of custom method.
+	 */
+	@Test
+	public void testFindUsersByNameQuery() {
+
+		User user = new User();
+		user.setUsername("username");
+		user.setFirstname("jams");
+
+		user = repository.save(user);
+
+		List<User> users = repository.findUsersByNameQuery("jams");
+
+		assertNotNull(users);
+		assertTrue(users.contains(user));
+	}
+	@Test
+	public void testFindUserByNameQuery() {
+
+		User user = new User();
+		user.setUsername("username");
+		user.setFirstname("jams");
+
+		user = repository.save(user);
+
+		User reference = repository.findUserByNameQuery("jams");
+		
+		assertNotNull(user);
+		assertEquals(user, repository.findOne(user.getId()));
+	}
 }
