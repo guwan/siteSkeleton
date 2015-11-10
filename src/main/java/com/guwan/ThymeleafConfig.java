@@ -13,7 +13,7 @@
 //    @Bean
 //    public TemplateResolver templateResolver() {
 //        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-//        templateResolver.setPrefix("/WEB-INF/views/");
+//        templateResolver.setPrefix("/templates/");
 //        templateResolver.setSuffix(".html");
 //        templateResolver.setTemplateMode("HTML5");
 //        return templateResolver;
