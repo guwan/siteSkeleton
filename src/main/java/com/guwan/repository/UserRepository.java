@@ -61,8 +61,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long>, 
 	@Query("select u from User u where u.enabled = ?1")
 	List<User> findByenabled(Boolean userEnabled);
 
-	List<User> findByUsername(String username);
+	User findByUsername(String username);
 	int deleteByUsername(String username);
-	int UpdatePasswordByUsername(String newpassword,String username);
 
 }

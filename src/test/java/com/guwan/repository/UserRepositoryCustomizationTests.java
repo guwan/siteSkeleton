@@ -67,10 +67,10 @@ public class UserRepositoryCustomizationTests {
 
 		user = repository.save(user);
 
-		List<User> users = repository.findByUsername("email");
+		User oneuser = repository.findByUsername("email");
 
-		assertNotNull(users);
-		assertTrue(users.contains(user));
+		assertNotNull(oneuser);
+		assertEquals(oneuser,user);
 
 		User reference = repository.findByEmail("email@qq.com");
 		assertEquals(user, reference);

@@ -192,7 +192,11 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
 
         logger.debug("Changing password for user '"+ username + "'");
 
-        repository.UpdatePasswordByUsername(newPassword,username);
+        User reference =repository.findByUsername(username);
+        reference.setPassword(newPassword);
+        repository.save(reference);
+        
+        //repository.setPasswordForUsername(newPassword,username);
 
         SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(currentUser, newPassword));
 
@@ -210,13 +214,8 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
     }
 
     public boolean userExists(String username) {
-    	List<User> users =repository.findByUsername(username);
-    	
-        if (users.size() > 1) {
-            throw new IncorrectResultSizeDataAccessException("More than one user found with name '" + username + "'", 1);
-        }
-
-        return users.size() == 1;
+    	User user =repository.findByUsername(username);
+        return user == null;
     }
 
     public void setAuthenticationManager(AuthenticationManager authenticationManager) {

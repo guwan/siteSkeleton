@@ -24,7 +24,7 @@ public class Authority implements GrantedAuthority{
     private Long id;
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="username",nullable = true)
-	private String username;
+	private User username;
 	@Column(nullable = true)
 	private String authority;
 	public Long getId() {
@@ -33,17 +33,17 @@ public class Authority implements GrantedAuthority{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
 	public String getAuthority() {
 		return authority;
 	}
 	public void setAuthority(String authority) {
 		this.authority = authority;
+	}
+	public User getUsername() {
+		return username;
+	}
+	public void setUsername(User username) {
+		this.username = username;
 	}
 	@Override
 	public int hashCode() {
@@ -80,6 +80,8 @@ public class Authority implements GrantedAuthority{
 			return false;
 		return true;
 	}
-	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	
 }
