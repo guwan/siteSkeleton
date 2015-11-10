@@ -33,10 +33,10 @@ public class UserDetailsServiceImpl implements org.springframework.security.core
 		userDetailsImpl.setJobTitle(user.getJobTitle());
 		userDetailsImpl.setLevelName(user.getLevelName());
 		userDetailsImpl.setLocation(user.getLocation());
-		userDetailsImpl.setUserame(user.getUsername());
+		userDetailsImpl.setUsername(user.getUsername());
 		userDetailsImpl.setPassword(user.getPassword());
 		userDetailsImpl.setUpdateAt(user.getUpdateAt());
-		userDetailsImpl.setUserEnabled(user.isUserEnabled());
+		userDetailsImpl.setUserEnabled(user.isEnabled());
 		userDetailsImpl.setVideoEmbeds(user.getVideoEmbeds());
 		
 	}

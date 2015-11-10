@@ -18,6 +18,8 @@ import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.guwan.support.ApplicationConfig;
+
  
 /**
  * user class.
@@ -31,7 +33,7 @@ public class User implements UserDetails{
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = -1388577017102559958L;
+	private static final long serialVersionUID = ApplicationConfig.serialVersionUID;
 
 	public static final User NOT_FOUND = new User();
     

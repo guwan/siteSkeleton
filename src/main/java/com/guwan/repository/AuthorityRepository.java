@@ -22,6 +22,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import com.guwan.domain.Authority;
 import com.guwan.domain.User;
 
 /**
@@ -31,38 +32,8 @@ import com.guwan.domain.User;
  * @author Oliver Gierke
  * @author Thomas Darimont
  */
-public interface UserRepository extends PagingAndSortingRepository<User, Long>, UserRepositoryCustom {
-
-	/**
-	 * Find the user with the given username. This method will be translated into a query using the
-	 * {@link javax.persistence.NamedQuery} annotation at the {@link User} class.
-	 * 
-	 * @param username
-	 * @return
-	 */
-	User loadUserByUsername(String username);
-
-	/**
-	 * Find all users with the given lastname. This method will be translated into a query by constructing it directly
-	 * from the method name as there is no other query declared.
-	 * 
-	 * @param lastname
-	 * @return
-	 */
-	User findByEmail(String email);
-
-	/**
-	 * Returns all users with the given firstname. This method will be translated into a query using the one declared in
-	 * the {@link Query} annotation declared one.
-	 * 
-	 * @param firstname
-	 * @return
-	 */
-	@Query("select u from User u where u.enabled = ?1")
-	List<User> findByenabled(Boolean userEnabled);
-
-	List<User> findByUsername(String username);
+public interface AuthorityRepository extends PagingAndSortingRepository<Authority, Long> {
 	int deleteByUsername(String username);
-	int UpdatePasswordByUsername(String newpassword,String username);
+
 
 }

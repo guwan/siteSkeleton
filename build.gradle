@@ -46,6 +46,8 @@ dependencies {
     // nekohtml is required for thymeleaf's LEGACYHTML5 mode
     runtime 'net.sourceforge.nekohtml:nekohtml'
     
+    //compile("javax.servlet:javax.servlet-api:3.0.1")
+    
 }
 
 task wrapper(type: Wrapper) {

@@ -20,8 +20,11 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.Assert;
 
+import com.guwan.domain.Authority;
 import com.guwan.domain.User;
+import com.guwan.repository.AuthorityRepository;
 import com.guwan.repository.UserRepository;
+import com.guwan.support.BCryptEncoder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -125,7 +128,8 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
 
     private AuthenticationManager authenticationManager;
 	@Autowired UserRepository repository;
-
+	@Autowired AuthorityRepository authorityRepository;
+	@Autowired BCryptEncoder bcryptEncoder;
     private UserCache userCache = new NullUserCache();
 
     //~ Methods ========================================================================================================
@@ -152,27 +156,23 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
         userCache.removeUserFromCache(user.getUsername());
     }
 
-    private void insertUserAuthorities(UserDetails user) {
-        for (GrantedAuthority auth : user.getAuthorities()) {
-            getJdbcTemplate().update(createAuthoritySql, user.getUsername(), auth.getAuthority());
-        }
-    }
-
     public void deleteUser(String username) {
-        if (getEnableAuthorities()) {
-            deleteUserAuthorities(username);
-        }
-        getJdbcTemplate().update(deleteUserSql, username);
+        repository.deleteByUsername(username);
         userCache.removeUserFromCache(username);
     }
+    
+    public void insertAuthorities(List<Authority> Authorities) {
+    	authorityRepository.save(Authorities);
+    }
 
-    private void deleteUserAuthorities(String username) {
-        getJdbcTemplate().update(deleteUserAuthoritiesSql, username);
+
+    private void deleteAuthorities(String username) {
+    	authorityRepository.deleteByUsername(username);
     }
 
     public void changePassword(String oldPassword, String newPassword) throws AuthenticationException {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-
+        newPassword = bcryptEncoder.encode(newPassword);
         if (currentUser == null) {
             // This would indicate bad coding somewhere
             throw new AccessDeniedException("Can't change password as no Authentication object found in context " +
@@ -192,7 +192,7 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
 
         logger.debug("Changing password for user '"+ username + "'");
 
-        getJdbcTemplate().update(changePasswordSql, newPassword, username);
+        repository.UpdatePasswordByUsername(newPassword,username);
 
         SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(currentUser, newPassword));
 

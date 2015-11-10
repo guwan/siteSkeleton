@@ -7,6 +7,7 @@
 	<persistence-unit name="application" transaction-type="RESOURCE_LOCAL">
 
         <class>com.guwan.domain.User</class>
+        <class>com.guwan.domain.Authority</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 
 	</persistence-unit>
