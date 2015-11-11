@@ -16,7 +16,7 @@ public class ViewsControllerTests extends AbstractContextControllerTests {
 	@Test
 	public void htmlView() throws Exception {
 		this.mockMvc.perform(get("/views/login"))
-				//.andExpect(view().name(containsString("views/login")))
+				.andExpect(view().name(containsString("views/login")))
 				.andExpect(model().attribute("foo", "bar"))
 				.andExpect(model().attribute("fruit", "apple"))
 				.andExpect(model().size(2));

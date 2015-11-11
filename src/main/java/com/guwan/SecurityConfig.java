@@ -1,10 +1,14 @@
 package com.guwan;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
@@ -15,9 +19,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	        .antMatchers("/admin/**").hasRole("ADMIN") 
 	        .anyRequest().authenticated() // 7
 	        .and()
-	    .formLogin()  
+	      .formLogin()
+	      	.usernameParameter("username")
+	      	.passwordParameter("password")
 	        .loginPage("/login") 
-	        .permitAll(); 
+	        .permitAll()
+	       .and().csrf().disable();
 	}
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -29,6 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/static/**"); 
+		web
+		.ignoring()
+		.antMatchers("/static/**","/resources/**"); 
 	}
 }
