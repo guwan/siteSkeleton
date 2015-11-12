@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -47,6 +48,7 @@ import java.util.List;
  * @author Luke Taylor
  * @since 2.0
  */
+@Service
 public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsManager {
     //~ Static fields/initializers =====================================================================================
 

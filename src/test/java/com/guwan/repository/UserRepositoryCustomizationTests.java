@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.guwan.CustomRepositoryConfig;
 import com.guwan.domain.User;
 import com.guwan.repository.UserRepository;
+import com.guwan.services.JpaUserDetailsManager;
 
 /**
  * Intergration test showing the basic usage of {@link UserRepository}.

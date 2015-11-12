@@ -27,6 +27,12 @@ public class Authority implements GrantedAuthority{
 	private User username;
 	@Column(nullable = true)
 	private String authority;
+	
+	public Authority(User username, String authority) {
+		super();
+		this.username = username;
+		this.authority = authority;
+	}
 	public Long getId() {
 		return id;
 	}

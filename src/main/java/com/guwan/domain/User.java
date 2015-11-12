@@ -2,6 +2,7 @@ package com.guwan.domain;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.guwan.support.ApplicationConfig;
+import com.sun.javafx.collections.MappingChange.Map;
 
  
 /**
@@ -95,7 +97,7 @@ public class User implements UserDetails{
     private boolean credentialsNonExpired;
     //ÊÚÈ¨
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="username")
-    private Collection<Authority> authorities;
+    private List<Authority> authorities;
 
     public User() {
 		this(null);
@@ -233,10 +235,7 @@ public class User implements UserDetails{
 	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -344,6 +343,13 @@ public class User implements UserDetails{
 			return false;
 		return true;
 	}
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+	public List<Authority> getAuthorities() {
+		return authorities;
+	}
+	
 	
     
 }

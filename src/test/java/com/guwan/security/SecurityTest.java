@@ -4,6 +4,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.guwan.domain.User;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
@@ -32,7 +35,7 @@ public class SecurityTest extends AbstractSecurityTests {
 	@Test
 	public void testAdminUrl() throws Exception{
 		mvc
-	    .perform(get("/admin").with(user("user"))).andExpect(status().is4xxClientError());
+	    .perform(get("/admin").with(user("user").roles("USER"))).andExpect(status().is4xxClientError());
 	}
 
 	/**
@@ -42,17 +45,7 @@ public class SecurityTest extends AbstractSecurityTests {
 	@Test
 	public void testAdminUrlByRole_USER() throws Exception{
 		mvc
-	    .perform(get("/admin")).andExpect(status().is4xxClientError());
+	    .perform(get("/admin").with(user("admin").roles("ADMIN"))).andExpect(status().isOk());
 	}
-//	/**
-//	 * @throws Exception 
-//	 * 
-//	 */
-//	@Test
-//	@WithMockUser(username="admin",password="password",roles="ADMIN")
-//	public void testAdminUrlByRole_ADMIN() throws Exception{
-//		mvc
-//	    .perform(get("/admin")).andExpect(status().is2xxSuccessful());
-//	}
 
 }

@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.guwan.pojo.JavaBean;
 
 @Controller
-@RequestMapping("/admin/*")
-public class LoginController {
+public class AdminController {
 
 	
-	@RequestMapping()
-	public void index(Model model) {
+	@RequestMapping(value="login", method=RequestMethod.GET)
+	public void usingRequestToViewNameTranslator(Model model) {
+		model.addAttribute("foo", "bar");
+		model.addAttribute("fruit", "apple");
 	}
 
 }
