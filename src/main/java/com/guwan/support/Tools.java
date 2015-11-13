@@ -1,6 +1,6 @@
 package com.guwan.support;
 
-public class TestTools {
+public class Tools {
 
 	public static void main(String[] args) {
 		BCryptEncoder bce = new BCryptEncoder();

@@ -1,24 +1,23 @@
 package com.guwan.services;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
-import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContextException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
-import org.springframework.jdbc.core.PreparedStatementSetter;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.Assert;
 
 import com.guwan.domain.Authority;
@@ -26,15 +25,6 @@ import com.guwan.domain.User;
 import com.guwan.repository.AuthorityRepository;
 import com.guwan.repository.UserRepository;
 import com.guwan.support.BCryptEncoder;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Jdbc user management service, based on the same table structure as its parent class, <tt>JdbcDaoImpl</tt>.
@@ -105,28 +95,6 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
     //~ Instance fields ================================================================================================
 
     protected final Log logger = LogFactory.getLog(getClass());
-
-    private String createUserSql = DEF_CREATE_USER_SQL;
-    private String deleteUserSql = DEF_DELETE_USER_SQL;
-    private String updateUserSql = DEF_UPDATE_USER_SQL;
-    private String createAuthoritySql = DEF_INSERT_AUTHORITY_SQL;
-    private String deleteUserAuthoritiesSql = DEF_DELETE_USER_AUTHORITIES_SQL;
-    private String userExistsSql = DEF_USER_EXISTS_SQL;
-    private String changePasswordSql = DEF_CHANGE_PASSWORD_SQL;
-
-    private String findAllGroupsSql = DEF_FIND_GROUPS_SQL;
-    private String findUsersInGroupSql = DEF_FIND_USERS_IN_GROUP_SQL;
-    private String insertGroupSql = DEF_INSERT_GROUP_SQL;
-    private String findGroupIdSql = DEF_FIND_GROUP_ID_SQL;
-    private String insertGroupAuthoritySql = DEF_INSERT_GROUP_AUTHORITY_SQL;
-    private String deleteGroupSql = DEF_DELETE_GROUP_SQL;
-    private String deleteGroupAuthoritiesSql = DEF_DELETE_GROUP_AUTHORITIES_SQL;
-    private String deleteGroupMembersSql = DEF_DELETE_GROUP_MEMBERS_SQL;
-    private String renameGroupSql = DEF_RENAME_GROUP_SQL;
-    private String insertGroupMemberSql = DEF_INSERT_GROUP_MEMBER_SQL;
-    private String deleteGroupMemberSql = DEF_DELETE_GROUP_MEMBER_SQL;
-    private String groupAuthoritiesSql = DEF_GROUP_AUTHORITIES_QUERY_SQL;
-    private String deleteGroupAuthoritySql = DEF_DELETE_GROUP_AUTHORITY_SQL;
 
     private AuthenticationManager authenticationManager;
 	@Autowired UserRepository repository;
@@ -222,106 +190,6 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
 
     public void setAuthenticationManager(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-    }
-
-    public void setCreateUserSql(String createUserSql) {
-        Assert.hasText(createUserSql);
-        this.createUserSql = createUserSql;
-    }
-
-    public void setDeleteUserSql(String deleteUserSql) {
-        Assert.hasText(deleteUserSql);
-        this.deleteUserSql = deleteUserSql;
-    }
-
-    public void setUpdateUserSql(String updateUserSql) {
-        Assert.hasText(updateUserSql);
-        this.updateUserSql = updateUserSql;
-    }
-
-    public void setCreateAuthoritySql(String createAuthoritySql) {
-        Assert.hasText(createAuthoritySql);
-        this.createAuthoritySql = createAuthoritySql;
-    }
-
-    public void setDeleteUserAuthoritiesSql(String deleteUserAuthoritiesSql) {
-        Assert.hasText(deleteUserAuthoritiesSql);
-        this.deleteUserAuthoritiesSql = deleteUserAuthoritiesSql;
-    }
-
-    public void setUserExistsSql(String userExistsSql) {
-        Assert.hasText(userExistsSql);
-        this.userExistsSql = userExistsSql;
-    }
-
-    public void setChangePasswordSql(String changePasswordSql) {
-        Assert.hasText(changePasswordSql);
-        this.changePasswordSql = changePasswordSql;
-    }
-
-    public void setFindAllGroupsSql(String findAllGroupsSql) {
-        Assert.hasText(findAllGroupsSql);
-        this.findAllGroupsSql = findAllGroupsSql;
-    }
-
-    public void setFindUsersInGroupSql(String findUsersInGroupSql) {
-        Assert.hasText(findUsersInGroupSql);
-        this.findUsersInGroupSql = findUsersInGroupSql;
-    }
-
-    public void setInsertGroupSql(String insertGroupSql) {
-        Assert.hasText(insertGroupSql);
-        this.insertGroupSql = insertGroupSql;
-    }
-
-    public void setFindGroupIdSql(String findGroupIdSql) {
-        Assert.hasText(findGroupIdSql);
-        this.findGroupIdSql = findGroupIdSql;
-    }
-
-    public void setInsertGroupAuthoritySql(String insertGroupAuthoritySql) {
-        Assert.hasText(insertGroupAuthoritySql);
-        this.insertGroupAuthoritySql = insertGroupAuthoritySql;
-    }
-
-    public void setDeleteGroupSql(String deleteGroupSql) {
-        Assert.hasText(deleteGroupSql);
-        this.deleteGroupSql = deleteGroupSql;
-    }
-
-    public void setDeleteGroupAuthoritiesSql(String deleteGroupAuthoritiesSql) {
-        Assert.hasText(deleteGroupAuthoritiesSql);
-        this.deleteGroupAuthoritiesSql = deleteGroupAuthoritiesSql;
-    }
-
-    public void setDeleteGroupMembersSql(String deleteGroupMembersSql) {
-        Assert.hasText(deleteGroupMembersSql);
-        this.deleteGroupMembersSql = deleteGroupMembersSql;
-    }
-
-    public void setRenameGroupSql(String renameGroupSql) {
-        Assert.hasText(renameGroupSql);
-        this.renameGroupSql = renameGroupSql;
-    }
-
-    public void setInsertGroupMemberSql(String insertGroupMemberSql) {
-        Assert.hasText(insertGroupMemberSql);
-        this.insertGroupMemberSql = insertGroupMemberSql;
-    }
-
-    public void setDeleteGroupMemberSql(String deleteGroupMemberSql) {
-        Assert.hasText(deleteGroupMemberSql);
-        this.deleteGroupMemberSql = deleteGroupMemberSql;
-    }
-
-    public void setGroupAuthoritiesSql(String groupAuthoritiesSql) {
-        Assert.hasText(groupAuthoritiesSql);
-        this.groupAuthoritiesSql = groupAuthoritiesSql;
-    }
-
-    public void setDeleteGroupAuthoritySql(String deleteGroupAuthoritySql) {
-        Assert.hasText(deleteGroupAuthoritySql);
-        this.deleteGroupAuthoritySql = deleteGroupAuthoritySql;
     }
 
     /**

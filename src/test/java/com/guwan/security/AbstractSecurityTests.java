@@ -2,11 +2,13 @@ package com.guwan.security;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 
 import javax.servlet.Filter;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,14 +23,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.guwan.Application;
+import com.guwan.BeanConfig;
 import com.guwan.CustomRepositoryConfig;
+import com.guwan.controller.AdminController;
 import com.guwan.domain.Authority;
 import com.guwan.domain.User;
 import com.guwan.repository.UserRepository;
 import com.guwan.support.BCryptEncoder;
 
 @SpringApplicationConfiguration(classes = Application.class)
-@ContextConfiguration(classes = CustomRepositoryConfig.class)
+@ContextConfiguration(classes ={ CustomRepositoryConfig.class,BeanConfig.class})
 @WebAppConfiguration
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,20 +59,13 @@ public class AbstractSecurityTests {
               .addFilters(springSecurityFilterChain)
               .build();
   }
-  @Test
-  public void createUser(){
-	  
-		User user=new User();
-		user.setUsername("user");
-		user.setPassword(bCryptEncoder.encode("password"));
-		ArrayList<Authority> a=new ArrayList<Authority>();
-		a.add(new Authority(user,"USER"));
-		user.setAuthorities(a);
-		repository.save(user);
-
-		User reference = repository.findUserByNameQuery("username");
-		
-		assertNotNull(reference);
-		assertEquals(user, reference);
+  @After
+  public void teardown(){
+	  repository.deleteByUsername("user");
+	  User reference = repository.findByUsername("user");
+	  assertNull(reference);
+	  repository.deleteByUsername("admin");
+	  User reference2 = repository.findByUsername("admin");
+	  assertNull(reference2);
   }
 }
