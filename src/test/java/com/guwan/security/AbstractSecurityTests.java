@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import javax.servlet.Filter;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,8 @@ import com.guwan.domain.User;
 import com.guwan.repository.UserRepository;
 import com.guwan.support.BCryptEncoder;
 
-@SpringApplicationConfiguration(classes = Application.class)
-@ContextConfiguration(classes ={ CustomRepositoryConfig.class,BeanConfig.class})
+//@SpringApplicationConfiguration(classes = Application.class)
+@ContextConfiguration(classes ={ CustomRepositoryConfig.class,BeanConfig.class,Application.class})
 @WebAppConfiguration
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -58,6 +60,37 @@ public class AbstractSecurityTests {
               .webAppContextSetup(context)
               .addFilters(springSecurityFilterChain)
               .build();
+  }
+  @Before
+  public void createUser(){
+	  
+	  	User user=new User();
+		user.setUsername("user");
+		user.setPassword(bCryptEncoder.encode("password"));
+		ArrayList<Authority> a=new ArrayList<Authority>();
+		a.add(new Authority(user,"ROLE_USER"));
+		user.setAuthorities(a);
+		repository.save(user);
+
+		User reference = repository.findByUsername("user");
+		
+		assertNotNull(reference);
+		assertEquals(user, reference);
+
+		  
+	  	User admin=new User();
+	  	admin.setUsername("admin");
+	  	admin.setPassword(bCryptEncoder.encode("password"));
+		ArrayList<Authority> a2=new ArrayList<Authority>();
+		a2.add(new Authority(admin,"ROLE_ADMIN"));
+		a2.add(new Authority(admin,"ROLE_USER"));
+		admin.setAuthorities(a2);
+		repository.save(admin);
+
+		User reference2 = repository.findByUsername("admin");
+		
+		assertNotNull(reference2);
+		assertEquals(admin, reference2);
   }
   @After
   public void teardown(){

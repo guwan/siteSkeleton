@@ -9,18 +9,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import com.guwan.services.JpaUserDetailsManager;
+import com.guwan.support.BCryptEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
-	JpaUserDetailsManager jpaUserDetailsManager;
+	@Autowired JpaUserDetailsManager jpaUserDetailsManager;
+	@Autowired BCryptEncoder bcryptEncoder;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 	      .authorizeRequests()
-	        .antMatchers("/signup","/about","/login").permitAll() 
+	        .antMatchers("/signup","/about").permitAll() 
 	        .antMatchers("/admin/**").hasRole("ADMIN") 
 	        .anyRequest().authenticated()
 	        .and()
@@ -34,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(jpaUserDetailsManager);
+		auth.userDetailsService(jpaUserDetailsManager)
+				.passwordEncoder(bcryptEncoder);
 //			.inMemoryAuthentication()
 //			.withUser("user").password("password").roles("USER").and()
 //			.withUser("admin").password("password").roles("USER", "ADMIN");

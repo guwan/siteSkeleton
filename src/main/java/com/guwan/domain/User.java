@@ -41,10 +41,13 @@ public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-   
-    //显示名
+
+    //登陆名
     @Column(nullable = true,unique = true)
     private String username;
+    //显示名
+    @Column(nullable = true)
+    private String name;
     //邮箱
     @Column(nullable = true,unique = true)
     private String email;
@@ -87,13 +90,13 @@ public class User implements UserDetails{
     @Column(nullable = false)
     private Date updateAt = new Date();
     //用户有效性
-    private boolean enabled;
+    private boolean enabled = true;
     //账号是否过期
-    private boolean accountNonExpired;
+    private boolean accountNonExpired = true;
     //非锁定账户
-    private boolean accountNonLocked;
+    private boolean accountNonLocked = true;
     //密码失效
-    private boolean credentialsNonExpired;
+    private boolean credentialsNonExpired = true;
     //授权
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="username")
     private List<Authority> authorities;
@@ -235,12 +238,25 @@ public class User implements UserDetails{
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 	
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+	public List<Authority> getAuthorities() {
+		return authorities;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (accountNonExpired ? 1231 : 1237);
 		result = prime * result + (accountNonLocked ? 1231 : 1237);
+		result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
 		result = prime * result + ((avatarUrl == null) ? 0 : avatarUrl.hashCode());
 		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
 		result = prime * result + ((createdAt == null) ? 0 : createdAt.hashCode());
@@ -252,6 +268,7 @@ public class User implements UserDetails{
 		result = prime * result + ((jobTitle == null) ? 0 : jobTitle.hashCode());
 		result = prime * result + ((levelName == null) ? 0 : levelName.hashCode());
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((updateAt == null) ? 0 : updateAt.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -270,6 +287,11 @@ public class User implements UserDetails{
 		if (accountNonExpired != other.accountNonExpired)
 			return false;
 		if (accountNonLocked != other.accountNonLocked)
+			return false;
+		if (authorities == null) {
+			if (other.authorities != null)
+				return false;
+		} else if (!authorities.equals(other.authorities))
 			return false;
 		if (avatarUrl == null) {
 			if (other.avatarUrl != null)
@@ -320,6 +342,11 @@ public class User implements UserDetails{
 				return false;
 		} else if (!location.equals(other.location))
 			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
@@ -341,12 +368,6 @@ public class User implements UserDetails{
 		} else if (!videoEmbeds.equals(other.videoEmbeds))
 			return false;
 		return true;
-	}
-	public void setAuthorities(List<Authority> authorities) {
-		this.authorities = authorities;
-	}
-	public List<Authority> getAuthorities() {
-		return authorities;
 	}
 	
 	
