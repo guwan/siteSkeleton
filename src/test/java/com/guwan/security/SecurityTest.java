@@ -41,7 +41,7 @@ public class SecurityTest extends AbstractSecurityTests {
 	public void testLogin() throws Exception{  
 		mvc
 			.perform(formLogin("/login").user("username","admin").password("password","password"))
-			.andExpect(authenticated().withUsername("admin"));
+			.andExpect(authenticated().withRoles("USER", "ADMIN"));//.withUsername("admin"));
 		
 	}
 	/**

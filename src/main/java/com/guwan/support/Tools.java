@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.guwan.domain.Authority;
+import com.guwan.domain.User;
 
 public class Tools {
 
@@ -15,7 +16,9 @@ public class Tools {
 		ArrayList<SimpleGrantedAuthority> sga =new ArrayList<SimpleGrantedAuthority>();		
 		ArrayList<Authority> a =new ArrayList<Authority>();
 		sga.add(new SimpleGrantedAuthority("ADMIN"));
-		a.add(new Authority("admin", "ADMIN"));
+		User user =new User();
+		user.setUsername("admin");
+		a.add(new Authority(user, "ADMIN"));
 	}
 
 }
