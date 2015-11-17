@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import com.guwan.security.CustomAuthenticationProvider;
 import com.guwan.services.JpaUserDetailsManager;
 import com.guwan.support.BCryptEncoder;
 
@@ -16,10 +17,12 @@ import com.guwan.support.BCryptEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired JpaUserDetailsManager jpaUserDetailsManager;
 	@Autowired BCryptEncoder bcryptEncoder;
+	@Autowired CustomAuthenticationProvider customAuthenticationProvider;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+		  .authenticationProvider(customAuthenticationProvider)
 	      .authorizeRequests()
 	        .antMatchers("/signup","/about").permitAll() 
 	        .antMatchers("/admin/**").hasRole("ADMIN") 
