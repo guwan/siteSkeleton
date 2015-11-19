@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Filter;
 
@@ -16,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -31,6 +33,7 @@ import com.guwan.controller.AdminController;
 import com.guwan.domain.Authority;
 import com.guwan.domain.User;
 import com.guwan.repository.UserRepository;
+import com.guwan.services.JpaUserDetailsManager;
 import com.guwan.support.BCryptEncoder;
 
 //@SpringApplicationConfiguration(classes = Application.class)
@@ -51,6 +54,8 @@ public class AbstractSecurityTests {
   
   @Autowired
   protected BCryptEncoder bCryptEncoder;
+  @Autowired
+  JpaUserDetailsManager jpaUserDetailsManager;
 
   protected MockMvc mvc;
 
@@ -67,10 +72,10 @@ public class AbstractSecurityTests {
 	  	User user=new User();
 		user.setUsername("user");
 		user.setPassword(bCryptEncoder.encode("password"));
-		ArrayList<Authority> a=new ArrayList<Authority>();
-		a.add(new Authority(user,"ROLE_USER"));
+		ArrayList<SimpleGrantedAuthority> a=new ArrayList<SimpleGrantedAuthority>();
+		a.add(new SimpleGrantedAuthority("ROLE_USER"));
 		user.setAuthorities(a);
-		repository.save(user);
+		jpaUserDetailsManager.createUser(user);
 
 		User reference = repository.findByUsername("user");
 		
@@ -81,11 +86,11 @@ public class AbstractSecurityTests {
 	  	User admin=new User();
 	  	admin.setUsername("admin");
 	  	admin.setPassword(bCryptEncoder.encode("password"));
-		ArrayList<Authority> a2=new ArrayList<Authority>();
-		a2.add(new Authority(admin,"ROLE_ADMIN"));
-		a2.add(new Authority(admin,"ROLE_USER"));
+		List<SimpleGrantedAuthority> a2=new ArrayList<SimpleGrantedAuthority>();
+		a2.add(new SimpleGrantedAuthority("ROLE_USER"));
+		a2.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		admin.setAuthorities(a2);
-		repository.save(admin);
+		jpaUserDetailsManager.createUser(admin);
 
 		User reference2 = repository.findByUsername("admin");
 		

@@ -17,6 +17,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.guwan.support.ApplicationConfig;
@@ -98,8 +99,8 @@ public class User implements UserDetails{
     //√‹¬Î ß–ß
     private boolean credentialsNonExpired = true;
     // ⁄»®
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="username")
-    private List<Authority> authorities;
+    @Transient
+    private List<SimpleGrantedAuthority> authorities;
 
     public User() {
 		this(null);
@@ -238,12 +239,6 @@ public class User implements UserDetails{
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 	
-	public void setAuthorities(List<Authority> authorities) {
-		this.authorities = authorities;
-	}
-	public List<Authority> getAuthorities() {
-		return authorities;
-	}
 	public String getName() {
 		return name;
 	}
@@ -368,6 +363,13 @@ public class User implements UserDetails{
 		} else if (!videoEmbeds.equals(other.videoEmbeds))
 			return false;
 		return true;
+	}
+	@Override
+	public List<SimpleGrantedAuthority> getAuthorities() {
+		return authorities;
+	}
+	public void setAuthorities(List<SimpleGrantedAuthority> authorities) {
+		this.authorities = authorities;
 	}
 	
 	

@@ -13,12 +13,6 @@ public class Tools {
 		BCryptEncoder bce = new BCryptEncoder();
 		System.out.println(bce.encode("password"));
 		
-		ArrayList<SimpleGrantedAuthority> sga =new ArrayList<SimpleGrantedAuthority>();		
-		ArrayList<Authority> a =new ArrayList<Authority>();
-		sga.add(new SimpleGrantedAuthority("ADMIN"));
-		User user =new User();
-		user.setUsername("admin");
-		a.add(new Authority(user, "ADMIN"));
 	}
 
 }

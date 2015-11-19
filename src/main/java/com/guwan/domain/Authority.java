@@ -22,42 +22,43 @@ public class Authority implements GrantedAuthority{
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="username",nullable = true)
-	private User username;
-	@Column(nullable = true)
+	private String username;
 	private String authority;
 	
-	public Authority(User user, String authority) {
+	public Authority(String username, String authority) {
 		super();
 		this.username = username;
 		this.authority = authority;
 	}
-	public Authority(String username, String authority) {
-		super();
-		User user=new User();
-		user.setUsername(username);
-		this.username = user;
-		this.authority = authority;
-	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getAuthority() {
 		return authority;
 	}
+
 	public void setAuthority(String authority) {
 		this.authority = authority;
 	}
-	public User getUsername() {
-		return username;
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
-	public void setUsername(User username) {
-		this.username = username;
-	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -67,6 +68,7 @@ public class Authority implements GrantedAuthority{
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -93,8 +95,6 @@ public class Authority implements GrantedAuthority{
 			return false;
 		return true;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+	
 	
 }

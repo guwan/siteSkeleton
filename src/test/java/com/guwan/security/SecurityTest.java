@@ -33,15 +33,13 @@ public class SecurityTest extends AbstractSecurityTests {
 	  
 	/**
 	 * test login
-	 * 不能使用.andExpect(authenticated().withRoles("USER", "ADMIN"));
-	 * 因为，wihRoles()使用SimpleGrantedAuthority判断授权，而系统是用的是自定义的Authority。故无法通过。
 	 * @throws Exception 
 	 */
 	@Test
 	public void testLogin() throws Exception{  
 		mvc
 			.perform(formLogin("/login").user("username","admin").password("password","password"))
-			.andExpect(authenticated().withUsername("admin"));
+			.andExpect(authenticated().withRoles("USER", "ADMIN"));//.withUsername("admin"));
 		
 	}
 	/**

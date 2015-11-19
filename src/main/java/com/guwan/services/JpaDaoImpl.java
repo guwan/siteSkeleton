@@ -38,6 +38,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.Assert;
 
+import com.guwan.domain.Authority;
 import com.guwan.domain.User;
 
 
@@ -134,7 +135,15 @@ public class JpaDaoImpl extends JpaDaoSupport implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     	TypedQuery<User> tq= em.createQuery(usersByUsernameQuery,User.class).setParameter(1, username);
+    	TypedQuery<Authority> atq= em.createQuery(authoritiesByUsernameQuery,Authority.class).setParameter(1, username);
     	UserDetails user = tq.getSingleResult();
+    	List<Authority> Authorities = atq.getResultList();
+    	List<SimpleGrantedAuthority> sgal =new ArrayList<SimpleGrantedAuthority>();
+    	for(Authority a : Authorities){
+    		sgal.add(new SimpleGrantedAuthority(a.getAuthority()));
+    	}
+    	User domain =(User) user;
+    	domain.setAuthorities(sgal);
         return user;
     }
 

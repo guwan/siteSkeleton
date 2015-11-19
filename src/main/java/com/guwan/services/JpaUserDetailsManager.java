@@ -1,5 +1,6 @@
 package com.guwan.services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -65,28 +67,24 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
     	User reference =(User) user;
         validateUserDetails(reference);
         repository.save(reference);
+        insertUserAuthorities(reference);
     }
 
     public void updateUser(final UserDetails user) {
         validateUserDetails(user);
         repository.save((User)user);
+        deleteUserAuthorities(user.getUsername());
+        insertUserAuthorities((User) user);
 
         userCache.removeUserFromCache(user.getUsername());
     }
 
     public void deleteUser(String username) {
+    	deleteUserAuthorities(username);
         repository.deleteByUsername(username);
         userCache.removeUserFromCache(username);
     }
     
-    public void insertAuthorities(List<Authority> Authorities) {
-    	authorityRepository.save(Authorities);
-    }
-
-
-    private void deleteAuthorities(String username) {
-    	authorityRepository.deleteByUsername(username);
-    }
 
     public void changePassword(String oldPassword, String newPassword) throws AuthenticationException {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
@@ -164,4 +162,17 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
             Assert.hasText(authority.getAuthority(), "getAuthority() method must return a non-empty string");
         }
     }
+	private void insertUserAuthorities(User reference) {
+        List<SimpleGrantedAuthority> simpleGrantedAuthorities=reference.getAuthorities();
+        List<Authority> authorities=new ArrayList<Authority>();
+        for(SimpleGrantedAuthority s:simpleGrantedAuthorities){
+        	authorities.add(new Authority(reference.getUsername(), s.getAuthority()));
+        }
+        authorityRepository.save(authorities);
+	}
+
+
+	private void deleteUserAuthorities(String username) {
+		authorityRepository.deleteByUsername(username);
+	}
 }

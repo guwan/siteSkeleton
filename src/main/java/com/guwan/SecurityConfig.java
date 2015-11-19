@@ -34,8 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http
-	      .authorizeRequests().accessDecisionManager(accessDecisionManager());
+//		http
+//	      .authorizeRequests().accessDecisionManager(accessDecisionManager());
 		http
 	      .authorizeRequests()
 	        .antMatchers("/signup","/about").permitAll() 
