@@ -9,13 +9,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
+
 import com.guwan.security.CustomAuthenticationProvider;
-import com.guwan.security.CustomRoleVoter;
+import com.guwan.security.CustomVoter;
 import com.guwan.services.JpaUserDetailsManager;
 import com.guwan.support.BCryptEncoder;
 
@@ -25,13 +30,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired JpaUserDetailsManager jpaUserDetailsManager;
 	@Autowired BCryptEncoder bcryptEncoder;
 	@Autowired CustomAuthenticationProvider customAuthenticationProvider;
-	@Autowired CustomRoleVoter customRoleVoter;
+	@Autowired CustomVoter customVoter;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http
-		  .authenticationProvider(customAuthenticationProvider)
+	      .authorizeRequests().accessDecisionManager(accessDecisionManager());
+		http
 	      .authorizeRequests()
-	      	.accessDecisionManager(accessDecisionManager())
 	        .antMatchers("/signup","/about").permitAll() 
 	        .antMatchers("/admin/**").hasRole("ADMIN") 
 	        .anyRequest().authenticated()
@@ -63,11 +69,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean(name = "accessDecisionManager")
 	public AccessDecisionManager accessDecisionManager() {
 		List<AccessDecisionVoter<? extends Object>> decisionVoters = new ArrayList<AccessDecisionVoter<? extends Object>>();
-		decisionVoters.add(customRoleVoter);// 启用表达式投票器
+		decisionVoters.add(customVoter);
+        decisionVoters.add(new RoleVoter());  
+        decisionVoters.add(new AuthenticatedVoter());  
 
 		AffirmativeBased accessDecisionManager = new AffirmativeBased(decisionVoters);
 
 		return accessDecisionManager;
-	}  
+	}
+	/*
+	 * 表达式控制器
+	 */
+	@Bean(name = "expressionHandler")
+	public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
+		DefaultWebSecurityExpressionHandler webSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+		return webSecurityExpressionHandler;
+	}
+
+	/*
+	 * 表达式投票器
+	 */
+	@Bean(name = "expressionVoter")
+	public WebExpressionVoter webExpressionVoter() {
+		WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
+		webExpressionVoter.setExpressionHandler(webSecurityExpressionHandler());
+		return webExpressionVoter;
+	}
 	  
 }

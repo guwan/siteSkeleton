@@ -41,7 +41,7 @@ public class SecurityTest extends AbstractSecurityTests {
 	public void testLogin() throws Exception{  
 		mvc
 			.perform(formLogin("/login").user("username","admin").password("password","password"))
-			.andExpect(authenticated().withRoles("USER", "ADMIN"));//.withUsername("admin"));
+			.andExpect(authenticated().withUsername("admin"));
 		
 	}
 	/**
@@ -53,16 +53,16 @@ public class SecurityTest extends AbstractSecurityTests {
 		mvc
 	    .perform(get("/admin").with(user("user").roles("USER"))).andExpect(status().is4xxClientError());
 	}
-
-	/**
-	 * 因为还没有制作admin页面此处屏蔽。
-	 * @throws Exception 
-	 */
-	@Test
-	@WithMockUser(username="admin",roles={"USER","ADMIN"})
-	public void testAdminUrlByRole_USER() throws Exception{
-//		mvc
-//	    .perform(get("/admin")).andExpect(status().isOk());
-	}
+//
+//	/**
+//	 * 因为还没有制作admin页面此处屏蔽。
+//	 * @throws Exception 
+//	 */
+//	@Test
+//	@WithMockUser(username="admin",roles={"USER","ADMIN"})
+//	public void testAdminUrlByRole_USER() throws Exception{
+////		mvc
+////	    .perform(get("/admin")).andExpect(status().isOk());
+//	}
 
 }
