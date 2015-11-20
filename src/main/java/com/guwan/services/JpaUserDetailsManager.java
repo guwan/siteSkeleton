@@ -67,6 +67,9 @@ public class JpaUserDetailsManager extends JpaDaoImpl implements UserDetailsMana
     	User reference =(User) user;
         validateUserDetails(reference);
         repository.save(reference);
+        if(reference.getAuthorities()==null){
+        	reference.getAuthorities().add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
         insertUserAuthorities(reference);
     }
 
