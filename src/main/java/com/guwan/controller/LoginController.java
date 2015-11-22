@@ -15,7 +15,7 @@ import com.guwan.pojo.JavaBean;
 public class LoginController {
 
 	
-	@RequestMapping()
+	@RequestMapping(method=RequestMethod.GET)
 	public void index(Model model) {
 	}
 
