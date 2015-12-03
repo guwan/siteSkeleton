@@ -25,6 +25,11 @@ public class Authority implements GrantedAuthority{
 	private String username;
 	private String authority;
 	
+	
+	public Authority() {
+		super();
+	}
+
 	public Authority(String username, String authority) {
 		super();
 		this.username = username;

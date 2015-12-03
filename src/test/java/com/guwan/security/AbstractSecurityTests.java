@@ -40,7 +40,6 @@ import com.guwan.support.BCryptEncoder;
 @ContextConfiguration(classes ={ CustomRepositoryConfig.class,BeanConfig.class,Application.class})
 @WebAppConfiguration
 @Transactional
-@RunWith(SpringJUnit4ClassRunner.class)
 public class AbstractSecurityTests {
 
   @Autowired
