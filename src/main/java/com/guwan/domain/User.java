@@ -4,15 +4,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
@@ -43,62 +40,62 @@ public class User implements UserDetails{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //µÇÂ½Ãû
+    //ç™»é™†å
     @Column(nullable = true,unique = true)
     private String username;
-    //ÏÔÊ¾Ãû
+    //æ˜¾ç¤ºå
     @Column(nullable = true)
     private String name;
-    //ÓÊÏä
+    //é‚®ç®±
     @Column(nullable = true,unique = true)
     private String email;
-    //ÃÜÂë
+    //å¯†ç 
     @Column(nullable = true)
     private String password;
-    //Ö°³Æ
+    //èŒç§°
     @Column(nullable = true)
     private String jobTitle;
     
-    //Î»ÖÃ
+    //ä½ç½®
     @Column(nullable = true)
     private String location;
-    //¼ò½é
+    //ç®€ä»‹
     @Column(nullable = true)
     @Type(type = "text")
     private String bio;
-    //Í·ÏñµØÖ·
+    //å¤´åƒåœ°å€
     @Column(nullable = true)
     private String avatarUrl;
-    //»ı·Ö
+    //ç§¯åˆ†
     @Column(nullable = true)
     private Integer integral;
 
-    //µÈ¼¶Ãû³Æ
+    //ç­‰çº§åç§°
     @Column(nullable = true)
     private String levelName;
-    //¾­Î³¶È
+    //ç»çº¬åº¦
     @Column
     private GeoLocation geoLocation;
 
-    //ÊÓÆµ¼ò½é
+    //è§†é¢‘ç®€ä»‹
     @Column
     @Type(type = "text")
     private String videoEmbeds;
-    //´´½¨Ê±¼ä
+    //åˆ›å»ºæ—¶é—´
     @Column(nullable = false)
     private Date createdAt = new Date();
-    //¸üĞÂÊ±¼ä
+    //æ›´æ–°æ—¶é—´
     @Column(nullable = false)
     private Date updateAt = new Date();
-    //ÓÃ»§ÓĞĞ§ĞÔ
+    //ç”¨æˆ·æœ‰æ•ˆæ€§
     private boolean enabled = true;
-    //ÕËºÅÊÇ·ñ¹ıÆÚ
+    //è´¦å·æ˜¯å¦è¿‡æœŸ
     private boolean accountNonExpired = true;
-    //·ÇËø¶¨ÕË»§
+    //éé”å®šè´¦æˆ·
     private boolean accountNonLocked = true;
-    //ÃÜÂëÊ§Ğ§
+    //å¯†ç å¤±æ•ˆ
     private boolean credentialsNonExpired = true;
-    //ÊÚÈ¨
+    //æˆæƒ
     @Transient
     private List<SimpleGrantedAuthority> authorities;
 

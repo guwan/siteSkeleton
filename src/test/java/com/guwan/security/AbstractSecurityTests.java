@@ -65,44 +65,46 @@ public class AbstractSecurityTests {
               .addFilters(springSecurityFilterChain)
               .build();
   }
-  @Before
-  public void createUser(){
-	  
-	  	User user=new User();
-		user.setUsername("user");
-		user.setPassword(bCryptEncoder.encode("password"));
-		ArrayList<SimpleGrantedAuthority> a=new ArrayList<SimpleGrantedAuthority>();
-		a.add(new SimpleGrantedAuthority("ROLE_USER"));
-		user.setAuthorities(a);
-		jpaUserDetailsManager.createUser(user);
-
-		User reference = repository.findByUsername("user");
-		
-		assertNotNull(reference);
-		assertEquals(user, reference);
-
-		  
-	  	User admin=new User();
-	  	admin.setUsername("admin");
-	  	admin.setPassword(bCryptEncoder.encode("password"));
-		List<SimpleGrantedAuthority> a2=new ArrayList<SimpleGrantedAuthority>();
-		a2.add(new SimpleGrantedAuthority("ROLE_USER"));
-		a2.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-		admin.setAuthorities(a2);
-		jpaUserDetailsManager.createUser(admin);
-
-		User reference2 = repository.findByUsername("admin");
-		
-		assertNotNull(reference2);
-		assertEquals(admin, reference2);
-  }
-  @After
-  public void teardown(){
-	  repository.deleteByUsername("user");
-	  User reference = repository.findByUsername("user");
-	  assertNull(reference);
-	  repository.deleteByUsername("admin");
-	  User reference2 = repository.findByUsername("admin");
-	  assertNull(reference2);
-  }
+  
+  //if without flyway, the code below will be necessary.
+//  @Before
+//  public void createUser(){
+//	  
+//	  	User user=new User();
+//		user.setUsername("user");
+//		user.setPassword(bCryptEncoder.encode("password"));
+//		ArrayList<SimpleGrantedAuthority> a=new ArrayList<SimpleGrantedAuthority>();
+//		a.add(new SimpleGrantedAuthority("ROLE_USER"));
+//		user.setAuthorities(a);
+//		jpaUserDetailsManager.createUser(user);
+//
+//		User reference = repository.findByUsername("user");
+//		
+//		assertNotNull(reference);
+//		assertEquals(user, reference);
+//
+//		  
+//	  	User admin=new User();
+//	  	admin.setUsername("admin");
+//	  	admin.setPassword(bCryptEncoder.encode("password"));
+//		List<SimpleGrantedAuthority> a2=new ArrayList<SimpleGrantedAuthority>();
+//		a2.add(new SimpleGrantedAuthority("ROLE_USER"));
+//		a2.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//		admin.setAuthorities(a2);
+//		jpaUserDetailsManager.createUser(admin);
+//
+//		User reference2 = repository.findByUsername("admin");
+//		
+//		assertNotNull(reference2);
+//		assertEquals(admin, reference2);
+//  }
+//  @After
+//  public void teardown(){
+//	  repository.deleteByUsername("user");
+//	  User reference = repository.findByUsername("user");
+//	  assertNull(reference);
+//	  repository.deleteByUsername("admin");
+//	  User reference2 = repository.findByUsername("admin");
+//	  assertNull(reference2);
+//  }
 }

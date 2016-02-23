@@ -1,5 +1,5 @@
 create table user(
-id BIGINT(19),
+id serial NOT NULL PRIMARY KEY,
 username VARCHAR(255),
 name VARCHAR(255),
 email VARCHAR(255),
@@ -18,13 +18,11 @@ updateAt TIMESTAMP(23),
 enabled BOOLEAN(1),
 accountNonExpired BOOLEAN(1),
 accountNonLocked BOOLEAN(1),
-credentialsNonExpired BOOLEAN(1),
-PRIMARY KEY (id)
+credentialsNonExpired BOOLEAN(1)
 );
 
 create table authority(
-id BIGINT(19),
+id serial NOT NULL PRIMARY KEY,
 username VARCHAR(255),
-authority VARCHAR(255),
-PRIMARY KEY (id)
+authority VARCHAR(255)
 );

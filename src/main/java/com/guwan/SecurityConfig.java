@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return accessDecisionManager;
 	}
 	/*
-	 * 表达式控制器
+	 * 琛ㄨ揪寮忔帶鍒跺櫒
 	 */
 	@Bean(name = "expressionHandler")
 	public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/*
-	 * 表达式投票器
+	 * 琛ㄨ揪寮忔姇绁ㄥ櫒
 	 */
 	@Bean(name = "expressionVoter")
 	public WebExpressionVoter webExpressionVoter() {

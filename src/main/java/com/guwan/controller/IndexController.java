@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.guwan.pojo.JavaBean;
 
 @Controller
-public class LoginController {
+@RequestMapping("/")
+public class IndexController {
 
 
-	@RequestMapping(value="login", method=RequestMethod.GET)
-	public void loginPage(Model model) {
+	@RequestMapping(method=RequestMethod.GET)
+	public String index(Model model) {
+		return "pages/index";
 	}
-	
+
+
 }
