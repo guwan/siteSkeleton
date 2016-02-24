@@ -35,9 +35,7 @@ public class UserFormBean {
 	private String password;
 	
 	private GenderType gender;
-	
-	@Min(21)
-	private int age;
+	 
 
 	@DateTimeFormat(iso=ISO.DATE)
 	@Past
@@ -52,14 +50,6 @@ public class UserFormBean {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
 	}
 
 	public Date getBirthDate() {
@@ -102,14 +92,9 @@ public class UserFormBean {
         sb.append("username=").append(username).append(", ");
         sb.append("name=").append(name).append(", ");
         sb.append("email=").append(email).append(", ");
-        if (name != null) {
-        	sb.append("'").append(name).append("', ");
-        } else {
-        	sb.append(name).append(", ");
-        }
-        sb.append("age=").append(age).append(", ");
+        sb.append("gender=").append(gender).append(", ");
         sb.append("birthDate=").append(birthDate).append(", ");
-        sb.append("phone=");
+        sb.append("phone=").append(phone).append(";");
         return sb.toString();
     }
 }
