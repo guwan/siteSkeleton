@@ -52,6 +52,14 @@ public class User implements UserDetails{
     //密码
     @Column(nullable = true)
     private String password;
+
+    //性别
+    @Column(nullable = true)
+    private String gender;
+    //电话
+    @Column
+    private String phone;
+    
     //职称
     @Column(nullable = true)
     private String jobTitle;
@@ -242,6 +250,7 @@ public class User implements UserDetails{
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -255,6 +264,7 @@ public class User implements UserDetails{
 		result = prime * result + (credentialsNonExpired ? 1231 : 1237);
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + (enabled ? 1231 : 1237);
+		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((integral == null) ? 0 : integral.hashCode());
 		result = prime * result + ((jobTitle == null) ? 0 : jobTitle.hashCode());
@@ -262,6 +272,7 @@ public class User implements UserDetails{
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + ((updateAt == null) ? 0 : updateAt.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		result = prime * result + ((videoEmbeds == null) ? 0 : videoEmbeds.hashCode());
@@ -309,6 +320,11 @@ public class User implements UserDetails{
 			return false;
 		if (enabled != other.enabled)
 			return false;
+		if (gender == null) {
+			if (other.gender != null)
+				return false;
+		} else if (!gender.equals(other.gender))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -344,6 +360,11 @@ public class User implements UserDetails{
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
+		if (phone == null) {
+			if (other.phone != null)
+				return false;
+		} else if (!phone.equals(other.phone))
+			return false;
 		if (updateAt == null) {
 			if (other.updateAt != null)
 				return false;
@@ -360,6 +381,18 @@ public class User implements UserDetails{
 		} else if (!videoEmbeds.equals(other.videoEmbeds))
 			return false;
 		return true;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	@Override
 	public List<SimpleGrantedAuthority> getAuthorities() {
