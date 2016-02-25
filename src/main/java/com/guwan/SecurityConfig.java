@@ -38,9 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //	      .authorizeRequests().accessDecisionManager(accessDecisionManager());
 		http
 	      .authorizeRequests()
-	        .antMatchers("/signup","/about").permitAll() 
+	        .antMatchers("/signup","/about","/register").permitAll() 
 	        .antMatchers("/admin/**").hasRole("ADMIN") 
-	        .anyRequest().authenticated()
+	        .anyRequest().permitAll()//.authenticated()
 	        .and()
 	      .formLogin()
 	      	.usernameParameter("username")

@@ -57,6 +57,9 @@ dependencies {
     // for use in on-the-fly database setup and migrations
     compile 'org.flywaydb:flyway-core'
     
+    //csv
+    compile 'org.apache.commons:commons-csv:1.2'
+    
 }
 
 task wrapper(type: Wrapper) {

@@ -1,5 +1,7 @@
 package com.guwan.controller;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -15,22 +17,36 @@ import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.internal.creation.util.MockitoMethodProxy;
+import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.guwan.domain.User;
+import com.guwan.formBean.UserFormBean;
+import com.guwan.services.JpaUserDetailsManager;
+
+
+
 public class RegisterControllerTests {
 
 	private MockMvc mockMvc;
-
+	@Mock
+    private JpaUserDetailsManager userDetailsManager;
 	@Before
 	public void setup() throws Exception {
 
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix("/WEB-INF/");
-		viewResolver.setSuffix(".jsp");
+		viewResolver.setPrefix("/templates/");
+		viewResolver.setSuffix(".html");
 
-		this.mockMvc = standaloneSetup(new RegisterController()).setViewResolvers(viewResolver).build();
+		this.mockMvc = standaloneSetup(new RegisterController(userDetailsManager)).setViewResolvers(viewResolver).build();
+		Mockito.doNothing().when(userDetailsManager);
+		
 	}
 
 	@Test
@@ -38,20 +54,21 @@ public class RegisterControllerTests {
 		String timezone = getTimezone(1941, 12, 16); 
 		this.mockMvc.perform(
 				post("/register")
-					.param("username", "Joe")
+					.param("username", "Joe Smith")
 					.param("name", "Joe")
 					.param("email", "joe@qq.com")
+					.param("password", "password")
+					.param("gender", "male")
 					.param("birthDate", "1941-12-16")
-					.param("phone", "+8613500000000")
-					.param("gender", "male"))
+					.param("phone", "+8613500000000"))
 				.andDo(print())
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl("/register"))
 				.andExpect(flash().attribute("message",
-						"Form submitted successfully.  Bound properties name='Joe', age=56, " +
-						"birthDate=Tue Dec 16 00:00:00 " + timezone + " 1941, phone='(347) 888-1234', " +
-						"currency=123.33, percent=0.89, inquiry=comment, inquiryDetails='what is?'," +
-						" subscribeNewsletter=false, additionalInfo={java=true, mvc=true}"));
+								"Form submitted successfully.  Bound properties username=Joe Smith, "
+										+"name=Joe, email=joe@qq.com, gender=male, "
+										+ "birthDate=Tue Dec 16 08:00:00 " + timezone
+										+ " 1941, phone=+8613500000000;"));
 	}
 
 	@Test
@@ -60,27 +77,21 @@ public class RegisterControllerTests {
 		this.mockMvc.perform(
 				post("/register")
 					.header("X-Requested-With", "XMLHttpRequest")
+					.param("username", "Joe Smith")
 					.param("name", "Joe")
-					.param("age", "56")
+					.param("email", "joe@qq.com")
+					.param("password", "password")
+					.param("gender", "male")
 					.param("birthDate", "1941-12-16")
-					.param("phone", "(347) 888-1234")
-					.param("currency", "$123.33")
-					.param("percent", "89%")
-					.param("inquiry", "comment")
-					.param("inquiryDetails", "what is?")
-					.param("additionalInfo[mvc]", "true")
-					.param("_additionalInfo[mvc]", "on")
-					.param("additionalInfo[java]", "true")
-					.param("_additionalInfo[java]", "on")
-					.param("subscribeNewsletter", "false"))
+					.param("phone", "+8613500000000"))
 				.andExpect(status().isOk())
-				.andExpect(view().name("form"))
+				.andExpect(view().name("register"))
 				.andExpect(model().hasNoErrors())
 				.andExpect(model().attribute("message",
-						"Form submitted successfully.  Bound properties name='Joe', age=56, " +
-						"birthDate=Tue Dec 16 00:00:00 " + timezone + " 1941, phone='(347) 888-1234', " +
-						"currency=123.33, percent=0.89, inquiry=comment, inquiryDetails='what is?'," +
-						" subscribeNewsletter=false, additionalInfo={java=true, mvc=true}"));
+								"Form submitted successfully.  Bound properties username=Joe Smith, "
+										+"name=Joe, email=joe@qq.com, gender=male, "
+										+ "birthDate=Tue Dec 16 08:00:00 " + timezone
+										+ " 1941, phone=+8613500000000;"));
 	}
 
 	@Test
@@ -88,9 +99,11 @@ public class RegisterControllerTests {
 		this.mockMvc.perform(
 				post("/register"))
 				.andExpect(status().isOk())
-				.andExpect(view().name("form"))
-				.andExpect(model().errorCount(2))
-				.andExpect(model().attributeHasFieldErrors("formBean", "name", "age"));
+				.andExpect(view().name("register"))
+				.andExpect(model().errorCount(4))
+				.andExpect(model()
+						.attributeHasFieldErrors("userFormBean", "username",
+								"name", "email", "password"));
 	}
 	
 	private String getTimezone(int year, int month, int day)

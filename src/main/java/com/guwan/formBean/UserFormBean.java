@@ -16,21 +16,22 @@ import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.format.annotation.NumberFormat.Style;
 
+import com.guwan.domain.User;
 import com.guwan.support.MaskFormat;
 import com.guwan.type.GenderType;
 
 public class UserFormBean {
-
+	@NotEmpty
 	@Size(min=6,max=20,message="validate.username.lengthError")
 	private String username;
 
 	@NotEmpty
 	private String name;
-	
+	@NotEmpty
 	@Pattern(regexp = "^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$"
 			,message="validate.email.patternError")
 	private String email;
-	
+	@NotEmpty
 	@Size(min=6,max=20,message="validate.password.lengthError")
 	private String password;
 	
@@ -85,11 +86,38 @@ public class UserFormBean {
 		this.gender = gender;
 	}
 
+	
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public User getFilledUser(){
+		User user=new User();
+		user.setUsername(username);
+		user.setName(name);
+		user.setPassword(password);
+		user.setEmail(email);
+		user.setGender(gender.toString());
+		user.setBirthDate(birthDate);
+		return user;
+	}
+	
 	public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("properties name=");
-        sb.append("username=").append(username).append(", ");
+        sb.append("properties username=").append(username).append(", ");
         sb.append("name=").append(name).append(", ");
         sb.append("email=").append(email).append(", ");
         sb.append("gender=").append(gender).append(", ");

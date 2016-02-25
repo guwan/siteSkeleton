@@ -56,6 +56,10 @@ public class User implements UserDetails{
     //性别
     @Column(nullable = true)
     private String gender;
+
+    //生日
+    @Column
+    private Date birthDate = new Date();
     //电话
     @Column
     private String phone;
@@ -250,7 +254,32 @@ public class User implements UserDetails{
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 	
+	public Date getBirthDate() {
+		return birthDate;
+	}
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+	@Override
+	public List<SimpleGrantedAuthority> getAuthorities() {
+		return authorities;
+	}
+	public void setAuthorities(List<SimpleGrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -260,6 +289,7 @@ public class User implements UserDetails{
 		result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
 		result = prime * result + ((avatarUrl == null) ? 0 : avatarUrl.hashCode());
 		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
+		result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
 		result = prime * result + ((createdAt == null) ? 0 : createdAt.hashCode());
 		result = prime * result + (credentialsNonExpired ? 1231 : 1237);
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
@@ -305,6 +335,11 @@ public class User implements UserDetails{
 			if (other.bio != null)
 				return false;
 		} else if (!bio.equals(other.bio))
+			return false;
+		if (birthDate == null) {
+			if (other.birthDate != null)
+				return false;
+		} else if (!birthDate.equals(other.birthDate))
 			return false;
 		if (createdAt == null) {
 			if (other.createdAt != null)
@@ -381,25 +416,6 @@ public class User implements UserDetails{
 		} else if (!videoEmbeds.equals(other.videoEmbeds))
 			return false;
 		return true;
-	}
-	public String getGender() {
-		return gender;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	@Override
-	public List<SimpleGrantedAuthority> getAuthorities() {
-		return authorities;
-	}
-	public void setAuthorities(List<SimpleGrantedAuthority> authorities) {
-		this.authorities = authorities;
 	}
 	
 	
