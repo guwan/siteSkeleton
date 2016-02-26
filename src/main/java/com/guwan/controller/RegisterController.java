@@ -49,7 +49,8 @@ public class RegisterController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public void form() {
+	public String form() {
+		return "pages/register";
 	}
 
 	@RequestMapping(method=RequestMethod.POST)
@@ -74,7 +75,7 @@ public class RegisterController {
 			// store a success message for rendering on the next request after redirect
 			// redirect back to the form to render the success message along with newly bound values
 			redirectAttrs.addFlashAttribute("message", message);
-			return "redirect:/register";			
+			return "redirect:pages/register";			
 		}
 	}
 }

@@ -17,7 +17,7 @@ import com.guwan.Application;
 
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class AbstractContextControllerTests {
+public abstract class ContextControllerTests {
 
 	@Autowired
 	protected WebApplicationContext wac;

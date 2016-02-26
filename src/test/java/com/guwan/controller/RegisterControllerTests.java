@@ -1,7 +1,5 @@
 package com.guwan.controller;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -17,21 +15,16 @@ import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.internal.creation.util.MockitoMethodProxy;
-import org.mockito.internal.invocation.MockitoMethod;
-import org.mockito.internal.stubbing.answers.DoesNothing;
-import org.springframework.http.MediaType;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.guwan.domain.User;
-import com.guwan.formBean.UserFormBean;
 import com.guwan.services.JpaUserDetailsManager;
 
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class RegisterControllerTests {
 
 	private MockMvc mockMvc;
@@ -45,7 +38,15 @@ public class RegisterControllerTests {
 		viewResolver.setSuffix(".html");
 
 		this.mockMvc = standaloneSetup(new RegisterController(userDetailsManager)).setViewResolvers(viewResolver).build();
-		Mockito.doNothing().when(userDetailsManager);
+//		UserFormBean userFormBean = new UserFormBean();
+//		userFormBean.setUsername("Joe Smith");
+//		userFormBean.setName("Joe");
+//		userFormBean.setEmail("joe@qq.com");
+//		userFormBean.setPassword("password");
+//		userFormBean.setUsername("1941-12-16");
+//		userFormBean.setPhone("+8613500000000");
+//		userFormBean.setGender(GenderType.male);
+//		Mockito.doNothing().when(userDetailsManager).createUser(userFormBean.getFilledUser());
 		
 	}
 
@@ -63,7 +64,7 @@ public class RegisterControllerTests {
 					.param("phone", "+8613500000000"))
 				.andDo(print())
 				.andExpect(status().isFound())
-				.andExpect(redirectedUrl("/register"))
+				.andExpect(redirectedUrl("pages/register"))
 				.andExpect(flash().attribute("message",
 								"Form submitted successfully.  Bound properties username=Joe Smith, "
 										+"name=Joe, email=joe@qq.com, gender=male, "
