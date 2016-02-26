@@ -1,8 +1,10 @@
 package com.guwan.formBean;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Min;
@@ -182,5 +184,17 @@ public class UserFormBean {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
+	}
+
+	public static String getTimezone(int year, int month, int day)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, year);
+		calendar.set(Calendar.MONTH, month);
+		calendar.set(Calendar.DAY_OF_MONTH, day);
+		Date date = calendar.getTime();
+		TimeZone timezone = TimeZone.getDefault();
+		boolean inDaylight = timezone.inDaylightTime(date);
+		return timezone.getDisplayName(inDaylight, TimeZone.SHORT);
 	}
 }

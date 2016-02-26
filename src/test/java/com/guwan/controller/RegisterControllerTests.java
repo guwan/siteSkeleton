@@ -21,6 +21,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.guwan.formBean.UserFormBean;
 import com.guwan.services.JpaUserDetailsManager;
 
 
@@ -52,7 +53,7 @@ public class RegisterControllerTests {
 
 	@Test
 	public void submitSuccess() throws Exception {
-		String timezone = getTimezone(1941, 12, 16); 
+		String timezone = UserFormBean.getTimezone(1941, 12, 16); 
 		this.mockMvc.perform(
 				post("/register")
 					.param("username", "Joe Smith")
@@ -74,7 +75,7 @@ public class RegisterControllerTests {
 
 	@Test
 	public void submitSuccessAjax() throws Exception {
-		String timezone = getTimezone(1941, 12, 16); 
+		String timezone = UserFormBean.getTimezone(1941, 12, 16); 
 		this.mockMvc.perform(
 				post("/register")
 					.header("X-Requested-With", "XMLHttpRequest")
@@ -106,17 +107,4 @@ public class RegisterControllerTests {
 						.attributeHasFieldErrors("userFormBean", "username",
 								"name", "email", "password"));
 	}
-	
-	private String getTimezone(int year, int month, int day)
-	{
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.MONTH, month);
-		calendar.set(Calendar.DAY_OF_MONTH, day);
-		Date date = calendar.getTime();
-		TimeZone timezone = TimeZone.getDefault();
-		boolean inDaylight = timezone.inDaylightTime(date);
-		return timezone.getDisplayName(inDaylight, TimeZone.SHORT);
-	}
-
 }
