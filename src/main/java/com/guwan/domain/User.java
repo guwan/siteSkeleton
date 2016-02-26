@@ -273,6 +273,7 @@ public class User implements UserDetails{
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+	
 	@Override
 	public List<SimpleGrantedAuthority> getAuthorities() {
 		return authorities;
