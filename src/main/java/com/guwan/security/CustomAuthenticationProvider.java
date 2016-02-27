@@ -21,7 +21,7 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 	@Autowired BCryptEncoder bcryptEncoder;
 	@Autowired JpaUserDetailsManager jpaUserDetailsManager;
 	
-	private SaltSource saltSource;//没有使用，此处为兼容
+	private SaltSource saltSource;//娌℃湁浣跨敤锛屾澶勪负鍏煎
 
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails userDetails,

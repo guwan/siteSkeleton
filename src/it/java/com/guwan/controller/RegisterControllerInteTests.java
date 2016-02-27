@@ -36,26 +36,25 @@ public class RegisterControllerInteTests extends ContextControllerIntegrationTes
 	public void register() throws Exception {
 		UserFormBean userFormBean = new UserFormBean();
 		String timezone = UserFormBean.getTimezone(1941, 12, 16); 
-		this.mockMvc.perform(
-				post("/register")
-					.param("username", "JoeSmith")
-					.param("name", "Joe")
-					.param("email", "joe@qq.com")
-					.param("password", "password")
-					.param("gender", "male")
-					.param("birthDate", "1941-12-16")
-					.param("phone", "+8613500000000"))
-				.andDo(print())
-				.andExpect(status().isFound())
-				.andExpect(redirectedUrl("pages/register"))
-				.andExpect(flash().attribute("message",
-								"Form submitted successfully.  Bound properties username=JoeSmith, "
-										+"name=Joe, email=joe@qq.com, gender=male, "
-										+ "birthDate=Tue Dec 16 08:00:00 " + timezone
-										+ " 1941, phone=+8613500000000;"));
+		mockMvc.perform(
+			post("/register")
+				.param("username", "JoeSmith")
+				.param("name", "Joe")
+				.param("email", "joe@qq.com")
+				.param("password", "password")
+				.param("gender", "male")
+				.param("birthDate", "1941-12-16")
+				.param("phone", "+8613500000000"))
+			//.andDo(print())
+			.andExpect(status().isFound())
+			.andExpect(redirectedUrl("pages/register"))
+			.andExpect(flash().attribute("message",
+							"Form submitted successfully.  Bound properties username=JoeSmith, "
+									+"name=Joe, email=joe@qq.com, gender=male, "
+									+ "birthDate=Tue Dec 16 08:00:00 " + timezone
+									+ " 1941, phone=+8613500000000;"));
 		mockMvc
-				.perform(formLogin("/login").user("username","JoeSmith").password("password","password"))
-				.andExpect(authenticated().withRoles("USER"));
+			.perform(formLogin("/login").user("username","JoeSmith").password("password","password"))
+			.andExpect(authenticated().withRoles("USER"));
 	}
-
 }

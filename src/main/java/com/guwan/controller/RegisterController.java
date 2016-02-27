@@ -64,7 +64,7 @@ public class RegisterController {
 		// via SessionStatus.setCompleted(). For the demo we leave it in the session.
 		String message = "Form submitted successfully.  Bound " + userFormBean;
 		User user =userFormBean.getFilledUser();
-		userDetailsManager.createUser(user);
+		userDetailsManager.createUserWithDefaultAuth(user);
 		sessionStatus.setComplete();//clear the "form" attribute from the session
 		// Success response handling
 		if (ajaxRequest) {
