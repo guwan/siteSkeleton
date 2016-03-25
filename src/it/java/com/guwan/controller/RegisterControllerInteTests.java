@@ -53,6 +53,7 @@ public class RegisterControllerInteTests extends ContextControllerIntegrationTes
 									+"name=Joe, email=joe@qq.com, gender=male, "
 									+ "birthDate=Tue Dec 16 08:00:00 " + timezone
 									+ " 1941, phone=+8613500000000;"));
+
 		mockMvc
 			.perform(formLogin("/login").user("username","JoeSmith").password("password","password"))
 			.andExpect(authenticated().withRoles("USER"));
